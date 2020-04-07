@@ -1,8 +1,5 @@
-from functools import reduce
-
-import pandas as pd
 import sys
-import os
+import pandas as pd
 
 print('Python version ' + sys.version)
 print('Pandas version ' + pd.__version__)
@@ -32,108 +29,133 @@ Location3 = r'C:\Users\pltzi\Desktop\data mining\data\march\listings.csv'
 # big_df = pd.concat(df_list)
 # print(big_df)
 
-df1 = pd.read_csv(Location1,usecols=[
-'id',
-'zipcode',
-'transit',
-'bedrooms',
-'beds',
-'review_scores_rating',
-'number_of_reviews',
-'neighbourhood',
-'name',
-'latitude',
-'longitude',
-'last_review',
-'instant_bookable',
-'host_since',
-'host_response_rate',
-'host_identity_verified',
-'host_has_profile_pic',
-'first_review',
-'description',
-'city',
-'cancellation_policy',
-'bed_type',
-'bathrooms',
-'accommodates',
-'amenities',
-'room_type',
-'property_type',
-'price',
-'availability_365',
-'minimum_nights'
+df1 = pd.read_csv(Location1, usecols=[
+    'id',
+    'zipcode',
+    'transit',
+    'bedrooms',
+    'beds',
+    'review_scores_rating',
+    'number_of_reviews',
+    'neighbourhood',
+    'name',
+    'latitude',
+    'longitude',
+    'last_review',
+    'instant_bookable',
+    'host_since',
+    'host_response_rate',
+    'host_identity_verified',
+    'host_has_profile_pic',
+    'first_review',
+    'description',
+    'city',
+    'cancellation_policy',
+    'bed_type',
+    'bathrooms',
+    'accommodates',
+    'amenities',
+    'room_type',
+    'property_type',
+    'price',
+    'availability_365',
+    'minimum_nights',
+    'room_type'
 ])
 
-df2 = pd.read_csv(Location2,usecols=[
-'id',
-'zipcode',
-'transit',
-'bedrooms',
-'beds',
-'review_scores_rating',
-'number_of_reviews',
-'neighbourhood',
-'name',
-'latitude',
-'longitude',
-'last_review',
-'instant_bookable',
-'host_since',
-'host_response_rate',
-'host_identity_verified',
-'host_has_profile_pic',
-'first_review',
-'description',
-'city',
-'cancellation_policy',
-'bed_type',
-'bathrooms',
-'accommodates',
-'amenities',
-'room_type',
-'property_type',
-'price',
-'availability_365',
-'minimum_nights'
+df2 = pd.read_csv(Location2, usecols=[
+    'id',
+    'zipcode',
+    'transit',
+    'bedrooms',
+    'beds',
+    'review_scores_rating',
+    'number_of_reviews',
+    'neighbourhood',
+    'name',
+    'latitude',
+    'longitude',
+    'last_review',
+    'instant_bookable',
+    'host_since',
+    'host_response_rate',
+    'host_identity_verified',
+    'host_has_profile_pic',
+    'first_review',
+    'description',
+    'city',
+    'cancellation_policy',
+    'bed_type',
+    'bathrooms',
+    'accommodates',
+    'amenities',
+    'room_type',
+    'property_type',
+    'price',
+    'availability_365',
+    'minimum_nights'
 ])
 
-df3 = pd.read_csv(Location3,usecols=[
-'id',
-'zipcode',
-'transit',
-'bedrooms',
-'beds',
-'review_scores_rating',
-'number_of_reviews',
-'neighbourhood',
-'name',
-'latitude',
-'longitude',
-'last_review',
-'instant_bookable',
-'host_since',
-'host_response_rate',
-'host_identity_verified',
-'host_has_profile_pic',
-'first_review',
-'description',
-'city',
-'cancellation_policy',
-'bed_type',
-'bathrooms',
-'accommodates',
-'amenities',
-'room_type',
-'property_type',
-'price',
-'availability_365',
-'minimum_nights'
+df3 = pd.read_csv(Location3, usecols=[
+    'id',
+    'zipcode',
+    'transit',
+    'bedrooms',
+    'beds',
+    'review_scores_rating',
+    'number_of_reviews',
+    'neighbourhood',
+    'name',
+    'latitude',
+    'longitude',
+    'last_review',
+    'instant_bookable',
+    'host_since',
+    'host_response_rate',
+    'host_identity_verified',
+    'host_has_profile_pic',
+    'first_review',
+    'description',
+    'city',
+    'cancellation_policy',
+    'bed_type',
+    'bathrooms',
+    'accommodates',
+    'amenities',
+    'room_type',
+    'property_type',
+    'price',
+    'availability_365',
+    'minimum_nights'
 ])
 
-# big_df = [df1,df2,df3]
-#
-# df_final = reduce(lambda left,right: pd.merge(left,right,on='name'), big_df)
-df1.combine_first(df2)
-df1.combine_first(df3)
-print(df1)
+df = df1
+
+# MERGE
+# df = pd.merge(df1, df2, on=['id', 'name', 'latitude', 'longitude'], how="outer")
+# df = pd.merge(df, df3, on=['id', 'name', 'latitude', 'longitude'], how="outer")
+
+# Combine first solution
+
+df.combine_first(df2)
+df.combine_first(df3)
+
+# # method for finding all missing data
+# bool_series = pd.isnull(df)
+# print(bool_series)
+
+
+# method for dropping all rows with null values
+new_df = df.dropna(axis=0, how="any")
+
+# #drop duplicates with distinct subset
+# new_df.sort_values("id", inplace = True)
+# new_df.drop_duplicates(subset="id", keep=False, inplace=True)
+# new_df.to_csv('train.csv',index = False,header = True)
+# print(new_df)
+
+#drop duplicate rows
+new_df.sort_values("id", inplace = True)
+new_df.drop_duplicates(keep=False, inplace=True)
+new_df.to_csv('train.csv',index = False,header = True)
+print(new_df)
