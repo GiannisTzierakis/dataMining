@@ -1,5 +1,8 @@
 import sys
+from functools import reduce
+
 import pandas as pd
+import numpy as np
 
 print('Python version ' + sys.version)
 print('Pandas version ' + pd.__version__)
@@ -137,8 +140,11 @@ df = df1
 
 # Combine first solution
 
-df.combine_first(df2)
-df.combine_first(df3)
+# df.combine_first(df2)
+# df.combine_first(df3)
+
+dfs=[df1,df2,df3]
+df4=reduce(lambda left,right: pd.merge(left,right,on='id'),dfs)
 
 # # method for finding all missing data
 # bool_series = pd.isnull(df)
@@ -146,7 +152,7 @@ df.combine_first(df3)
 
 
 # method for dropping all rows with null values
-new_df = df.dropna(axis=0, how="any")
+new_df = df4.dropna(axis=0, how="any")
 
 # #drop duplicates with distinct subset
 # new_df.sort_values("id", inplace = True)
@@ -154,8 +160,12 @@ new_df = df.dropna(axis=0, how="any")
 # new_df.to_csv('train.csv',index = False,header = True)
 # print(new_df)
 
-#drop duplicate rows
-new_df.sort_values("id", inplace = True)
+# drop duplicate rows
+new_df.sort_values("id", inplace=True)
 new_df.drop_duplicates(keep=False, inplace=True)
-new_df.to_csv('train.csv',index = False,header = True)
+new_df.to_csv('train.csv', index=False, header=True)
 print(new_df)
+
+rtypes = new_df['room_type'].value_counts()
+print(rtypes)
+
