@@ -1,5 +1,6 @@
 import sys
 import pandas as pd
+import matplotlib.pyplot as plt
 
 print('Python version ' + sys.version)
 print('Pandas version ' + pd.__version__)
@@ -117,19 +118,27 @@ df3 = pd.read_csv(Location3, usecols=[
 df = df1.append(df2)
 df = df.append(df3)
 
-# method for dropping all rows with null values
-new_df = df.dropna(axis=0, how="any")
-
 # #drop duplicates with distinct subset
 # new_df.drop_duplicates(subset="id", keep=False, inplace=True)
 
 # drop all duplicate rows
 
-new_df.sort_values("id", inplace=True)
-new_df.drop_duplicates(keep=False, inplace=True)
+df.sort_values("price", inplace=True)
+df.drop_duplicates(keep=False, inplace=True)
+# method for dropping all rows with null values
+new_df = df.dropna(axis='rows', how="any")
+
 new_df.to_csv('train.csv', index=False, header=True)
 print(new_df)
+
+# 1.1
 
 rtypes = new_df['room_type'].value_counts()
 print(rtypes)
 
+# 1.2
+
+new_df.plot(x='price', kind='hist')
+plt.show()
+
+# 1.3
