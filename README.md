@@ -1,1 +1,1 @@
-# DATA MINING PROJECTs IN JUPYTER NOTEBOOK
+# Data mining projects using Jupyter Notebook
